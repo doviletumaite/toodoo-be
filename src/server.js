@@ -10,6 +10,9 @@ import {
 } from "./errorHandlers.js";
 import userRouter from "./services/users/index.js";
 import onConnection from "./socketio/connection.js";
+import passport from "passport";
+import googleStrategy from "./services/users/authentication/oauth.js";
+
 
 const app = express();
 app.use(express.json());
@@ -29,6 +32,8 @@ app.use(notFoundHandler);
 app.use(badRequestHandler);
 app.use(genericErrorHandler);
 
+passport.use("google", googleStrategy);
+app.use(passport.initialize());
 app.use("/user", userRouter)
 
 mongoose.connect(process.env.MONGO_URL);

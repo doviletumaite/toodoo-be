@@ -14,13 +14,17 @@ const userShema = new Schema({
     },
     password: {
         type: String,
-        required: true,
+        required: function() {return !Boolean(this.googleId)},
     },
     profilePicture: {
         type: String,
         default:
           "https://cdn.pixabay.com/photo/2016/08/08/09/17/avatar-1577909_960_720.png",
-      }
+      },
+      googleId: {
+        type: String,
+        required: function() {return !Boolean(this.password)}
+      },
 })
 
 userShema.pre("save", async function () {
