@@ -1,13 +1,21 @@
 import createHttpError from "http-errors";
+import { verifyJWT } from "./tokenGenerator.js";
 
 const JWTAuth = async (req, res, next) => {
     if (!req.headers.authorization){
         next(createHttpError(404, 'provide a token pls'))
     } else {
         try {
-            
+            const token = req.headers.authorization.replace("Bearer ", "")
+            const decodedToken = await verifyJWT(decodedToken._id)
+            if (user) {
+                req.user = user
+                next()
+            } else {
+                next(createHttpError(404, "smth wrong"))
+            }
         } catch (error) {
-            next(createHttpError(401, "no token founded"))
+            next(createHttpError(401, "smth wrong"))
         }
     }
 }
