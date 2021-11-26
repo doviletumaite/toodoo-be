@@ -17,19 +17,19 @@ import googleStrategy from "./services/users/authentication/oauth.js";
 
 const app = express();
 
-const whiteList = [process.env.FRONT_END_URL, "http://localhost:3000"];
-const corsOptions = {
-  origin: (origin, callback) => {
-    if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
-      callback(null, true);
-    } else {
-      const error = new Error("Not allowed by cors!");
-      error.status = 403;
-      callback(error);
-    }
-  },
-};
-app.use(cors(corsOptions));
+// const whiteList = ["http://localhost:3003", "http://localhost:3000/showcase", "http://localhost:3003/user/googleLogin" ];
+// const corsOptions = {
+//   origin: (origin, callback) => {
+//     if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+//       callback(null, true);
+//     } else {
+//       const error = new Error("Not allowed by cors!");
+//       error.status = 403;
+//       callback(error);
+//     }
+//   },
+// };
+app.use(cors());
 
 app.use(express.json());
 
