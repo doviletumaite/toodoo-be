@@ -1,6 +1,7 @@
 import express from "express";
 import listEndpoints from "express-list-endpoints";
 import http from "http";
+import cors from "cors";
 import mongoose from "mongoose";
 import { Server } from "socket.io";
 import {
@@ -15,6 +16,21 @@ import googleStrategy from "./services/users/authentication/oauth.js";
 
 
 const app = express();
+
+const whiteList = [process.env.FRONT_END_URL, "http://localhost:3000"];
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (whiteList.some((allowedUrl) => allowedUrl === origin)) {
+      callback(null, true);
+    } else {
+      const error = new Error("Not allowed by cors!");
+      error.status = 403;
+      callback(error);
+    }
+  },
+};
+app.use(cors(corsOptions));
+
 app.use(express.json());
 
 const PORT = process.env.PORT;
