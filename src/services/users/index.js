@@ -1,6 +1,7 @@
 import express from "express";
 import createHttpError from "http-errors";
 import passport from "passport";
+import JWTAuth from "./authentication/jwt.js";
 import { JWTAuthenticate } from "./authentication/tokenGenerator.js";
 import userModel from "./schema.js"
 
@@ -35,6 +36,18 @@ userRouter.get("/googleLogin",passport.authenticate("google", { scope: ["profile
 userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, res, next) => {
     try {
         res.redirect("http://localhost:3000/showcase");  
+    } catch (error) {
+        next(error) 
+    }
+})
+
+userRouter.get("/me", JWTAuth, async (req, res, next) => {
+    try {
+        const userData = req.user
+        console.log("ciao")
+        if(userData){
+         res.send(userData)
+        }
     } catch (error) {
         next(error) 
     }

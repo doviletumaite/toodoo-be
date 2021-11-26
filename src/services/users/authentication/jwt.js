@@ -1,4 +1,5 @@
 import createHttpError from "http-errors";
+import userModel from "../schema.js"
 import { verifyJWT } from "./tokenGenerator.js";
 
 const JWTAuth = async (req, res, next) => {
@@ -7,7 +8,11 @@ const JWTAuth = async (req, res, next) => {
     } else {
         try {
             const token = req.headers.authorization.replace("Bearer ", "")
-            const decodedToken = await verifyJWT(decodedToken._id)
+            console.log("body",req.headers.authorization)
+            console.log("token",token)
+            const decodedToken = await verifyJWT(token)
+            console.log("decodedToken",decodedToken)
+            const user = await userModel.findById(decodedToken._id)
             if (user) {
                 req.user = user
                 next()

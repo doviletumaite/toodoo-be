@@ -50,6 +50,7 @@ userShema.statics.checkCredentials = async function (email, plainPassword){
     const user = await this.findOne({email})
     if(user) {
         const isPaswordMatch = await bcrypt.compare(plainPassword, user.password)
+        console.log("isPaswordMatch",isPaswordMatch)
         if (isPaswordMatch) return user
         else return null
     }
