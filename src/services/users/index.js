@@ -61,7 +61,7 @@ userRouter.post("/avatar", JWTAuth,
       try {
         const user = await userModel.findByIdAndUpdate(
           req.user._id,
-          { avatar: req.file.path },
+          { profilePicture: req.file.path },
           {
             new: true,
           }
@@ -72,15 +72,13 @@ userRouter.post("/avatar", JWTAuth,
       }
     }
   );
-  userRouter.post("/register",
-    parseFile.single("avatar"),
+  userRouter.post("/register",parseFile.single("avatar"),
     async (req, res, next) => {
       try {
+        console.log("file", req.body)
         const newUser = {
-          username: req.body.username,
-          email: req.body.email,
-          password: req.body.password,
-          avatar: req.file.path,
+         ...req.body,
+          profilePicture: req.file.path,
         };
         const register = new userModel(newUser);
         const { username, email, avatar } = await register.save();
@@ -100,7 +98,7 @@ userRouter.post("/avatar", JWTAuth,
             ...req.user.toObject(),
             username: req.body.username,
             email: req.body.email,
-            avatar: req.file?.path,
+            profilePicture: req.file?.path,
           };
           const user = await userModel.findByIdAndUpdate(req.user._id, newUser, {
             new: true,
@@ -115,8 +113,9 @@ userRouter.post("/avatar", JWTAuth,
   userRouter.post("/logout", JWTAuth, async (req, res, next) => {
     try {
       req.user.refreshToken = null;
+      console.log("refresh in logout",req.user.refreshToken )
       await req.user.save();
-      res.send();
+      res.send("logged out");
     } catch (error) {
       next(error);
     }

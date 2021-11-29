@@ -13,6 +13,7 @@ import userRouter from "./services/users/index.js";
 import onConnection from "./socketio/connection.js";
 import passport from "passport";
 import googleStrategy from "./services/users/authentication/oauth.js";
+import postRouter from "./services/posts/index.js";
 
 
 const app = express();
@@ -51,6 +52,7 @@ app.use(genericErrorHandler);
 passport.use("google", googleStrategy);
 app.use(passport.initialize());
 app.use("/user", userRouter)
+app.use("/posts", postRouter)
 
 mongoose.connect(process.env.MONGO_URL);
 
