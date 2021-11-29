@@ -4,6 +4,7 @@ import passport from "passport";
 import JWTAuth from "./authentication/jwt.js";
 import { JWTAuthenticate } from "./authentication/tokenGenerator.js";
 import userModel from "./schema.js"
+import { parseFile } from "./cloudinary.js";
 
 const userRouter = express.Router()
 
@@ -57,7 +58,7 @@ userRouter.get("/me", JWTAuth, async (req, res, next) => {
 //missing routes
 userRouter.post(
     "/avatar",
-    JWtAuthenticateMiddle,
+    JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -96,7 +97,7 @@ userRouter.post(
   );
   userRouter.put(
     "/me",
-    JWtAuthenticateMiddle,
+    JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -117,7 +118,7 @@ userRouter.post(
       }
     }
   );
-  userRouter.post("/logout", JWtAuthenticateMiddle, async (req, res, next) => {
+  userRouter.post("/logout", JWTAuth, async (req, res, next) => {
     try {
       req.user.refreshToken = null;
       await req.user.save();
@@ -154,34 +155,8 @@ userRouter.post(
     }
   });
   
-  userRouter.get(
-    "/googleLogin",
-    passport.authenticate("google", { scope: ["profile", "email"] })
-  );
-  userRouter.get(
-    "/googleRedirect",
-    passport.authenticate("google"),
-    async (req, res, next) => {
-      try {
-        console.log("user", req.user);
-        res.redirect("http://localhost:3000/main");
-      } catch (error) {
-        next(error);
-      }
-    }
-  );
-  
-  userRouter.get("/me", JWtAuthenticateMiddle, async (req, res, next) => {
-    try {
-      const userData = req.user;
-      if (userData) {
-        res.send(userData);
-      }
-    } catch (error) {
-      next(error);
-    }
-  });
-  userRouter.put("/me", JWtAuthenticateMiddle, async (req, res, next) => {
+
+  userRouter.put("/me", JWTAuth, async (req, res, next) => {
     try {
       if (req.user) {
         const user = await userModel.findByIdAndUpdate(req.user._id, req.body, {
@@ -193,7 +168,7 @@ userRouter.post(
       next(error);
     }
   });
-  userRouter.get("/:userId", JWtAuthenticateMiddle, async (req, res, next) => {
+  userRouter.get("/:userId", JWTAuth, async (req, res, next) => {
     console.log(req.params.userId);
     try {
       if (req.user) {
@@ -207,7 +182,7 @@ userRouter.post(
     }
   });
   
-  userRouter.get("/", JWtAuthenticateMiddle, async (req, res, next) => {
+  userRouter.get("/", JWTAuth, async (req, res, next) => {
     console.log("sdcsdcsdcds-----", req.user);
     try {
       const users = await userModel.find({
