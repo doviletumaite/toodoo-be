@@ -55,10 +55,7 @@ userRouter.get("/me", JWTAuth, async (req, res, next) => {
 })
 
 
-//missing routes
-userRouter.post(
-    "/avatar",
-    JWTAuth,
+userRouter.post("/avatar", JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -75,8 +72,7 @@ userRouter.post(
       }
     }
   );
-  userRouter.post(
-    "/register",
+  userRouter.post("/register",
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -95,9 +91,7 @@ userRouter.post(
       }
     }
   );
-  userRouter.put(
-    "/me",
-    JWTAuth,
+  userRouter.put("/me", JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -128,33 +122,6 @@ userRouter.post(
     }
   });
   
-  userRouter.post("/account", async (req, res, next) => {
-    try {
-      const register = new userModel(req.body);
-      const saveUser = await register.save();
-      res.send({ saveUser });
-    } catch (error) {
-      console.log(error);
-      next(error);
-    }
-  });
-  userRouter.post("/session", async (req, res, next) => {
-    try {
-      const { email, password } = req.body;
-      const user = await userModel.checkCredentials(email, password);
-      if (user) {
-        const { accessToken, refreshToken } = await JWtAuthenticate(user);
-        res.send({ accessToken, refreshToken });
-      } else {
-        next(
-          createHttpError(401, "credentials are not ok check again correctly")
-        );
-      }
-    } catch (error) {
-      next(error);
-    }
-  });
-  
 
   userRouter.put("/me", JWTAuth, async (req, res, next) => {
     try {
@@ -172,9 +139,7 @@ userRouter.post(
     console.log(req.params.userId);
     try {
       if (req.user) {
-        console.log("sdfvdsfkjvbsdfkjb", req.user);
         const getUser = await userModel.findById(req.params.userId);
-        //   console.log(getUser);
         res.send({ getUser });
       }
     } catch (error) {
@@ -183,7 +148,6 @@ userRouter.post(
   });
   
   userRouter.get("/", JWTAuth, async (req, res, next) => {
-    console.log("sdcsdcsdcds-----", req.user);
     try {
       const users = await userModel.find({
         username: req.query.username,
