@@ -1,10 +1,12 @@
 import mongoose from "mongoose";
 import userSchema from "../users/schema.js"
+import user from "../users/schema.js"
 
 const {Schema, model} = mongoose
 
 const commentSchema = new Schema(
-    {comment:{type:String},
+    {
+    comment: {type: String},
     user: {type: mongoose.Schema.Types.ObjectId, ref:"user"}
 
     },
@@ -14,6 +16,7 @@ const commentSchema = new Schema(
 
 const postSchema = new Schema({
     text: {type: String, required: true},
+    picture: {type: String},
     user: {type: mongoose.Schema.Types.ObjectId, required: true},
     comments: {default: [], type: [commentSchema]}
 })
@@ -24,7 +27,7 @@ postSchema.static("findPostWithComments", async function (mongoQuery) {
     .limit(mongoQuery.options.limit || 10)
     .skip(mongoQuery.options.skip)
     .sort(mongoQuery.options.sort)
-    .populate({ path: "comments" })
+    .populate({ path: "comments", select: "comment" })
     return {total, posts}
 } )
 
