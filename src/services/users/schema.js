@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 const {Schema, model} = mongoose
 
-const userShema = new Schema({
+const userSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -25,12 +25,11 @@ const userShema = new Schema({
         type: String,
     },
       googleId: {
-        type: String,
-        required: function() {return !Boolean(this.password)}
+        type: String
       },
 })
 
-userShema.pre("save", async function () {
+userSchema.pre("save", async function () {
     const newUser = this
     const plainPassword = newUser.password
     if(newUser.isModified("password")){
@@ -38,7 +37,7 @@ userShema.pre("save", async function () {
     }
 })
 
-userShema.methods.toJSON = function () {
+userSchema.methods.toJSON = function () {
     const userDocument = this
     const userObject = userDocument.toObject()
     delete userObject.password
@@ -46,7 +45,7 @@ userShema.methods.toJSON = function () {
     return userObject
 }
 
-userShema.statics.checkCredentials = async function (email, plainPassword){
+userSchema.statics.checkCredentials = async function (email, plainPassword){
     const user = await this.findOne({email})
     if(user) {
         const isPaswordMatch = await bcrypt.compare(plainPassword, user.password)
@@ -56,4 +55,4 @@ userShema.statics.checkCredentials = async function (email, plainPassword){
     }
     return null
 }
-export default model('user', userShema)
+export default model("user", userSchema)
