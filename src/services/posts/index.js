@@ -8,9 +8,11 @@ const postRouter = express.Router()
 
 postRouter.get("/", async (req, res, next) => {
     try {
-        const mongoQuery = q2m(req.query)
-        const{total, posts} = await postModel.findPostWithComments(mongoQuery)
-        console.log(posts)
+        const posts = await postModel.find({}).populate({
+          path:"user",
+          select:"username bio"
+        })
+        console.log(posts.comments)
         res.send(posts)
     } catch (error) {
         next(error)
@@ -24,6 +26,7 @@ postRouter.post("/", async (req, res, next) => {
         res.status(201). send(post)
     } catch (error) {
         next(error)
+        res.send(500).send({ message: error.message });
     }
 })
 
@@ -71,7 +74,11 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
     try {
       const post = await postModel.findById(req.params.id)
       if (post){
-        res.send(post.comments)
+        const comments = await post.populate({
+          path:"comments.user",
+          select:"username bio"
+        })
+        res.send(comments)
       }else{
         res.send(`post id ${req.params.id} not found!`)
       }
