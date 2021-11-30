@@ -17,9 +17,12 @@ const commentSchema = new Schema(
 const postSchema = new Schema({
     text: {type: String, required: true},
     picture: {type: String},
-    user: {type: mongoose.Schema.Types.ObjectId, required: true},
+    user: {type: mongoose.Schema.Types.ObjectId,  ref:"user", required: true},
     comments: {default: [], type: [commentSchema]}
-})
+},
+{timestamps: true}
+)
+
 
 postSchema.static("findPostWithComments", async function (mongoQuery) {
     const total = await this.countDocuments(mongoQuery.criteria)
