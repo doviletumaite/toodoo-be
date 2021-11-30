@@ -10,7 +10,7 @@ postRouter.get("/", async (req, res, next) => {
     try {
         const posts = await postModel.find({}).populate({
           path:"user",
-          select:"username bio"
+          select:"username profilePicture bio"
         })
         console.log(posts.comments)
         res.send(posts)
