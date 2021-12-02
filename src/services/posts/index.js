@@ -76,7 +76,7 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
       if (post){
         const comments = await post.populate({
           path:"comments.user",
-          select:"username bio"
+          select:"username bio profilePicture"
         })
         res.send(comments)
       }else{
