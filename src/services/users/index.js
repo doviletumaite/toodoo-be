@@ -89,6 +89,22 @@ userRouter.post("/avatar", JWTAuth,
       }
     }
   );
+  userRouter.get("/",JWTAuth, async (req, res, next) => {
+    try {
+        const users = await userModel.find({})
+        res.send(users)
+    } catch (error) {
+        next(error)
+    }
+})
+userRouter.get("/:id",JWTAuth, async (req, res, next) => {
+  try {
+      const user = await userModel.findById(req.params.id)
+      res.send(user)
+  } catch (error) {
+      next(error)
+  }
+})
   userRouter.put("/me", JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
