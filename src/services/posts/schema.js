@@ -7,8 +7,8 @@ const {Schema, model} = mongoose
 const commentSchema = new Schema(
     {
     comment: {type: String},
-    user: {type: mongoose.Schema.Types.ObjectId, ref:"user"}
-
+    user: {type: mongoose.Schema.Types.ObjectId, ref:"user"},
+    postId: {type: mongoose.Schema.Types.ObjectId, ref:"post"}
     },
     
     {timestamps: true}
