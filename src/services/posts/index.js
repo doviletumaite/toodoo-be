@@ -12,7 +12,6 @@ postRouter.get("/", async (req, res, next) => {
           path:"user",
           select:"username profilePicture bio"
         })
-        console.log(posts.comments)
         res.send(posts)
     } catch (error) {
         next(error)
