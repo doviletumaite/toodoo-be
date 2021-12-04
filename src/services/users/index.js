@@ -97,9 +97,10 @@ userRouter.post("/avatar", JWTAuth,
         next(error)
     }
 })
-userRouter.get("/:id",JWTAuth, async (req, res, next) => {
+userRouter.get("/:id", async (req, res, next) => {
   try {
       const user = await userModel.findById(req.params.id)
+      console.log("uuuseeer",user)
       res.send(user)
   } catch (error) {
       next(error)
