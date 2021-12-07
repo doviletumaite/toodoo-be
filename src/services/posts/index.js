@@ -22,10 +22,11 @@ postRouter.post("/", async (req, res, next) => {
     try {
         const newPost = new postModel(req.body)
         const post = await newPost.save()
-        res.status(201). send(post)
+        console.log(post)
+        res.send(post)
     } catch (error) {
         next(error)
-        res.send(500).send({ message: error.message });
+        res.status(500).send({ message: error.message });
     }
 })
 
@@ -42,7 +43,25 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
       }
     }
   );
-
+  postRouter.post("/:idUser/picture", parseFile.single("picture"),
+  async (req, res, next) => {
+    try {
+      console.log(req.params.idUser)
+      console.log("file before",req.file.path)
+      const postPicture = new postModel({
+          user: req.params.idUser,
+          picture: req.file.path
+        })
+      console.log("user id",req.params.idUser )
+      console.log("PICTURE",req.file.path )
+      const newPost = await postPicture.save()
+      console.log(newPost)
+      res.send(newPost);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
   postRouter.post("/:id/comment", async (req, res, next) => {
     try {
       const post = await postModel.findById(req.params.id);

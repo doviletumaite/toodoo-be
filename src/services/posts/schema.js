@@ -15,7 +15,7 @@ const commentSchema = new Schema(
 )
 
 const postSchema = new Schema({
-    text: {type: String, required: true},
+    text: {type: String},
     picture: {type: String},
     user: {type: mongoose.Schema.Types.ObjectId,  ref:"user", required: true},
     comments: {default: [], type: [commentSchema]}
