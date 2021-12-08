@@ -80,7 +80,7 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
           { new: true }
         );
         console.log(comment);
-        res.status(204).send({comment});
+        res.status(200).send({comment});
       }
     } catch (error) {
       console.log(error);
