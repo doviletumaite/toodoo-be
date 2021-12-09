@@ -47,13 +47,14 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
   async (req, res, next) => {
     try {
       console.log(req.params.idUser)
-      console.log("file before",req.file.path)
+      console.log("body",req.body)
+      // console.log("file before",req.file.path)
       const postPicture = new postModel({
           user: req.params.idUser,
           picture: req.file.path
         })
-      console.log("user id",req.params.idUser )
-      console.log("PICTURE",req.file.path )
+      console.log("body after",req.body )
+      // console.log("PICTURE",req.file.path )
       const newPost = await postPicture.save()
       console.log(newPost)
       res.send(newPost);
