@@ -107,26 +107,25 @@ userRouter.get("/:id", async (req, res, next) => {
   }
 })
   userRouter.put("/meAvatar", JWTAuth,
-    parseFile.single("avatar"),
+    parseFile.single("picture"),
     async (req, res, next) => {
       try {
         if (req.user) {
-          const newUser = {
-            ...req.user.toObject(),
-            username: req.body.username,
-            email: req.body.email,
-            profilePicture: req.file?.path,
-          };
-          const user = await userModel.findByIdAndUpdate(req.user._id, newUser, {
-            new: true,
-          });
+          const userId = req.user._id
+          console.log("userId",userId)
+          const user = await userModel.findById(userId, {
+            profilePicture: req.file.path,
+        },
+        {new: true})
+         await user.save()
           res.send(user);
         }
       } catch (error) {
+        console.log(error)
         next(error);
       }
     }
-  );
+  )
 
   userRouter.post("/logout", JWTAuth, async (req, res, next) => {
     try {
