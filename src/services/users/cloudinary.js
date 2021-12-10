@@ -13,4 +13,4 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
 });
-export const parseFile = multer({ storage });
+export const parseFile = multer({storage});

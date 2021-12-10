@@ -11,7 +11,9 @@ const commentSchema = new Schema(
     postId: {type: mongoose.Schema.Types.ObjectId, ref:"post"}
     },
     
-    {timestamps: true}
+    { 
+        timestamps: true
+    }
 )
 
 const postSchema = new Schema({
@@ -20,7 +22,14 @@ const postSchema = new Schema({
     user: {type: mongoose.Schema.Types.ObjectId,  ref:"user", required: true},
     comments: {default: [], type: [commentSchema]}
 },
-{timestamps: true}
+{createdDate: {
+    type: Date,
+    default: Date.now
+  },
+  updatedDate: {
+    type: Date,
+    default: Date.now
+  }}
 )
 
 
