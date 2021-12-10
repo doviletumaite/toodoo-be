@@ -106,27 +106,27 @@ userRouter.get("/:id", async (req, res, next) => {
       next(error)
   }
 })
-  userRouter.put("/me", JWTAuth,
-    parseFile.single("avatar"),
+  userRouter.put("/meAvatar", JWTAuth,
+    parseFile.single("picture"),
     async (req, res, next) => {
       try {
         if (req.user) {
-          const newUser = {
-            ...req.user.toObject(),
-            username: req.body.username,
-            email: req.body.email,
-            profilePicture: req.file?.path,
-          };
-          const user = await userModel.findByIdAndUpdate(req.user._id, newUser, {
-            new: true,
-          });
+          const userId = req.user._id
+          console.log("userId",userId)
+          const user = await userModel.findById(userId, {
+            profilePicture: req.file.path,
+        },
+        {new: true})
+         await user.save()
           res.send(user);
         }
       } catch (error) {
+        console.log(error)
         next(error);
       }
     }
-  );
+  )
+
   userRouter.post("/logout", JWTAuth, async (req, res, next) => {
     try {
       req.user.refreshToken = null;
@@ -145,6 +145,7 @@ userRouter.get("/:id", async (req, res, next) => {
         const user = await userModel.findByIdAndUpdate(req.user._id, req.body, {
           new: true,
         });
+        console.log("bio", user)
         res.send(user);
       }
     } catch (error) {

@@ -22,14 +22,10 @@ const postSchema = new Schema({
     user: {type: mongoose.Schema.Types.ObjectId,  ref:"user", required: true},
     comments: {default: [], type: [commentSchema]}
 },
-{createdDate: {
-    type: Date,
-    default: Date.now
-  },
-  updatedDate: {
-    type: Date,
-    default: Date.now
-  }}
+  
+{ 
+    timestamps: true
+}
 )
 
 
