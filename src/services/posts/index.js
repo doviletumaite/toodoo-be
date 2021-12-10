@@ -29,6 +29,23 @@ postRouter.post("/", async (req, res, next) => {
         res.status(500).send({ message: error.message });
     }
 })
+postRouter.put("/:id", async (req, res, next) => {
+    try {
+      const post = await postModel.findById(req.params.id)
+      console.log(req.params.id)
+      const updatedPost = await postModel.findByIdAndUpdate(post, req.body, {
+          new: true
+      })
+      if (updatedPost){
+        console.log("edited post", updatedPost)
+          res.send(updatedPost)
+      } else {
+          createHttpError(404, "post not found")
+      }
+    } catch (error) {
+        next(error)
+    }
+})
 
 postRouter.put("/:id/picture", parseFile.single("picture"),
     async (req, res, next) => {
@@ -47,13 +64,14 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
   async (req, res, next) => {
     try {
       console.log(req.params.idUser)
-      console.log("file before",req.file.path)
+      console.log("body",req.body)
+      // console.log("file before",req.file.path)
       const postPicture = new postModel({
           user: req.params.idUser,
           picture: req.file.path
         })
-      console.log("user id",req.params.idUser )
-      console.log("PICTURE",req.file.path )
+      console.log("body after",req.body )
+      // console.log("PICTURE",req.file.path )
       const newPost = await postPicture.save()
       console.log(newPost)
       res.send(newPost);
@@ -139,21 +157,6 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
     }
   });
 
-postRouter.put("/:id", async (req, res, next) => {
-    try {
-      const post = await postModel.findById(req.params.id)
-      const updatedPost = await postModel.findByIdAndUpdate(post, req.body, {
-          new: true
-      })
-      if (updatedPost){
-          res.send(updatedPost)
-      } else {
-          createHttpError(404, "post not found")
-      }
-    } catch (error) {
-        next(error)
-    }
-})
 
 postRouter.delete("/:id", async (req, res, next) => {
     try {
