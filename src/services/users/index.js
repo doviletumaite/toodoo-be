@@ -106,7 +106,7 @@ userRouter.get("/:id", async (req, res, next) => {
       next(error)
   }
 })
-  userRouter.put("/me", JWTAuth,
+  userRouter.put("/meAvatar", JWTAuth,
     parseFile.single("avatar"),
     async (req, res, next) => {
       try {
@@ -127,6 +127,7 @@ userRouter.get("/:id", async (req, res, next) => {
       }
     }
   );
+
   userRouter.post("/logout", JWTAuth, async (req, res, next) => {
     try {
       req.user.refreshToken = null;
@@ -145,6 +146,7 @@ userRouter.get("/:id", async (req, res, next) => {
         const user = await userModel.findByIdAndUpdate(req.user._id, req.body, {
           new: true,
         });
+        console.log("bio", user)
         res.send(user);
       }
     } catch (error) {
