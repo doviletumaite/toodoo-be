@@ -32,15 +32,15 @@ listRouter.get("/:Id", async (req, res, next) => {
             path:"user",
             select: "username"
         })  
-        console.log("whole list", list)
         const userId = req.params.Id
-        const thatList = await list.find(l=> l.user._id.toString()===userId )
+        const thatList = await list.filter(l=> l.user._id.toString()===userId )
         console.log("that list",thatList )
         res.send(thatList)
     } catch (error) {
         next(error) 
     }
 })
+
 
 listRouter.put("/:id", async (req, res, next) => {
     try {
