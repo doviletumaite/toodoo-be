@@ -113,7 +113,7 @@ userRouter.get("/:id", async (req, res, next) => {
         if (req.user) {
           const userId = req.user._id
           console.log("userId",userId)
-          const user = await userModel.findById(userId, {
+          const user = await userModel.findByIdAndUpdate(userId, {
             ...req.body,
             profilePicture: req.file.path,
         },
