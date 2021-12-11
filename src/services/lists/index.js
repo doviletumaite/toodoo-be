@@ -26,10 +26,17 @@ listRouter.post("/", async (req, res, next) => {
         res.status(500).send({ message: error.message });
     }
 })
-listRouter.get("/:id", async (req, res, next) => {
+listRouter.get("/:Id", async (req, res, next) => {
     try {
-        const list = await listModel.findById(req.params.id)
-        res.send(list)
+        const list = await listModel.find({}).populate({
+            path:"user",
+            select: "username"
+        })  
+        console.log("whole list", list)
+        const userId = req.params.Id
+        const thatList = await list.find(l=> l.user._id.toString()===userId )
+        console.log("that list",thatList )
+        res.send(thatList)
     } catch (error) {
         next(error) 
     }
