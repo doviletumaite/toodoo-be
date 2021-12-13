@@ -66,6 +66,8 @@ listRouter.post("/:id/task", async (req, res, next) =>{
                 {$push: {tasks: req.body}},
                 {new:true}
             )
+            console.log(req.body)
+
             res.status(200).send({task})
         }
     } catch (error) {
