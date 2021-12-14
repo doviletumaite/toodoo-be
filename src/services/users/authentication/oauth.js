@@ -10,9 +10,10 @@ const googleStrategy = new GoogleStrategy({
 }, async (accessToken, refreshToken, googleProfile, next) => {
     try {
         const user = await userModel.findOne({googleId: googleProfile.id})
+        console.log(user)
         if(user) {
             const tokens = await JWTAuthenticate(user)
-            next(null, {tokens})
+            next(null, {tokens} ,{user})
         } else {
             const newUser = {
                 username: googleProfile.name.givenName,
@@ -23,7 +24,7 @@ const googleStrategy = new GoogleStrategy({
             const createdUser = new userModel(newUser)
             const savedUser = await createdUser.save()
             const tokens = await JWTAuthenticate(savedUser)
-            next(null, {tokens})
+            next(null, {tokens}, {savedUser} )
         }
     } catch (error) {
         next(error)
