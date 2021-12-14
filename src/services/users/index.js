@@ -2,9 +2,10 @@ import express from "express";
 import createHttpError from "http-errors";
 import passport from "passport";
 import JWTAuth from "./authentication/jwt.js";
-import { JWTAuthenticate } from "./authentication/tokenGenerator.js";
+import { JWTAuthenticate, verifyJWT } from "./authentication/tokenGenerator.js";
 import userModel from "./schema.js"
 import { parseFile } from "./cloudinary.js";
+import googleStrategy from "./authentication/oauth.js";
 
 const userRouter = express.Router()
 
@@ -36,7 +37,12 @@ userRouter.post("/login",async (req, res, next) => {
 userRouter.get("/googleLogin",passport.authenticate("google", { scope: ["profile", "email"] }));
 userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, res, next) => {
     try {
-        res.redirect("http://localhost:3000/showcase");  
+      const user  = req.user
+  console.log(user)
+   const decodedToken = await verifyJWT(user.tokens.accessToken)
+   console.log(decodedToken._id)
+     res.redirect(`http://localhost:3000/showcasepre/${decodedToken._id}/${user.tokens.accessToken}` )
+        
     } catch (error) {
         next(error) 
     }
@@ -45,7 +51,6 @@ userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, r
 userRouter.get("/me", JWTAuth, async (req, res, next) => {
     try {
         const userData = req.user
-        console.log("ciao")
         if(userData){
          res.send(userData)
         }

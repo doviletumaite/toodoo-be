@@ -8,10 +8,8 @@ const JWTAuth = async (req, res, next) => {
     } else {
         try {
             const token = req.headers.authorization.replace("Bearer ", "")
-            console.log("body",req.headers.authorization)
-            console.log("token",token)
             const decodedToken = await verifyJWT(token)
-            console.log("decodedToken",decodedToken)
+        
             const user = await userModel.findById(decodedToken._id)
             if (user) {
                 req.user = user

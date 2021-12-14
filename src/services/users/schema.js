@@ -25,7 +25,8 @@ const userSchema = new Schema({
         type: String,
     },
       googleId: {
-        type: String
+        type: String,
+        required: function() {return !Boolean(this.password)},
       },
 })
 

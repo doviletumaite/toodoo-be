@@ -1,6 +1,7 @@
 import express from "express"
 import createHttpError from "http-errors";
 import q2m from "query-to-mongo";
+import JWTAuth from "../users/authentication/jwt.js";
 import { parseFile } from "../users/cloudinary.js";
 import postModel from "./schema.js"
 
@@ -75,6 +76,22 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
     }
   }
 );
+
+postRouter.post( "/postwithimage",JWTAuth, parseFile.single('picture'), async (req, res, next) => {
+  try {
+      const newPost = JSON.parse(req.body.text)
+      console.log("newPost", newPost) 
+      newPost.user = req.user._id
+      newPost.picture = req.file.path 
+      const post = new postModel(newPost)
+      const { _id } = await post.save(post) 
+      res.status(201).send() 
+  } catch (error) {
+      next(error)
+  }
+  }
+)
+
   postRouter.post("/:id/comment", async (req, res, next) => {
     try {
       const post = await postModel.findById(req.params.id);
