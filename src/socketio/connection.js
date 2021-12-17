@@ -1,5 +1,6 @@
 import * as sendMessageEvent from "./sendMessage.js";
 import roomModel from "../socketio/rooms/schema.js"
+import userModel from "../services/users/schema.js"
 
 const onConnection = (io, socket) => {
     console.log("socket connected :] with that id -> " + socket.id)
@@ -13,6 +14,20 @@ const onConnection = (io, socket) => {
             })
 
         socket.broadcast.emit("message", message)
+
+    })
+
+    
+    socket.on("setRoom", async ({ room }) => {
+    
+        const onlineUsers = await userModel.find({})
+        onlineUsers.push({ room })
+
+        socket.join(room)
+
+        socket.emit("loggedin")
+
+        socket.broadcast.emit("newConnection")
 
     })
 }
