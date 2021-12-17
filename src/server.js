@@ -15,8 +15,10 @@ import passport from "passport";
 import googleStrategy from "./services/users/authentication/oauth.js";
 import postRouter from "./services/posts/index.js";
 import listRouter from "./services/lists/index.js";
-import socketRoute from "./socketio/services/conversation.js";
-import authorizeSocket from "./services/users/authentication/authSocket.js";
+import conversationRouter from "./socketio/conversation/index.js";
+import messageRouter from "./socketio/message/index.js";
+// import socketRoute from "./socketio/services/conversation.js";
+// import authorizeSocket from "./services/users/authentication/authSocket.js";
 
 
 const app = express();
@@ -47,7 +49,7 @@ app.use((req, res, next) => {
   req.io = io;
   next();
 });
-io.use(authorizeSocket)
+// io.use(authorizeSocket)
 
 app.use(notFoundHandler);
 app.use(badRequestHandler);
@@ -58,7 +60,8 @@ app.use(passport.initialize());
 app.use("/user", userRouter)
 app.use("/posts", postRouter)
 app.use("/list", listRouter)
-app.use("/chat", socketRoute)
+app.use("/conversation", conversationRouter)
+app.use("/message", messageRouter)
 
 mongoose.connect(process.env.MONGO_URL);
 

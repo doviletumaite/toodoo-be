@@ -1,21 +1,20 @@
-import * as sendMessageEvent from "./sendMessage.js";
-import roomModel from "../socketio/rooms/schema.js"
+// import roomModel from "./chat/schema.js"
 import userModel from "../services/users/schema.js"
 
 const onConnection = (io, socket) => {
     console.log("socket connected :] with that id -> " + socket.id)
 
 
-    socket.on("sendMessage", async ({ message, room }) => {
+    // socket.on("sendMessage", async ({ message, room }) => {
 
-        await roomModel.findOneAndUpdate({ room },
-            {
-                $push: { chatHistory: message }
-            })
+    //     await roomModel.findOneAndUpdate({ room },
+    //         {
+    //             $push: { chatHistory: message }
+    //         })
 
-        socket.broadcast.emit("message", message)
+    //     socket.broadcast.emit("message", message)
 
-    })
+    // })
 
     
     socket.on("setRoom", async ({ room }) => {
