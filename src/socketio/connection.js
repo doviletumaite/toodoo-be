@@ -1,34 +1,21 @@
-// import roomModel from "./chat/schema.js"
-import userModel from "../services/users/schema.js"
 
+let users = []
+const addUser = (userID, socketId) => {
+  !users.some(user=>user.userID === userID) &&
+  users.push({userID, socketId})
+}
 const onConnection = (io, socket) => {
-    console.log("socket connected :] with that id -> " + socket.id)
 
-
-    // socket.on("sendMessage", async ({ message, room }) => {
-
-    //     await roomModel.findOneAndUpdate({ room },
-    //         {
-    //             $push: { chatHistory: message }
-    //         })
-
-    //     socket.broadcast.emit("message", message)
-
-    // })
-
-    
-    socket.on("setRoom", async ({ room }) => {
-    
-        const onlineUsers = await userModel.find({})
-        onlineUsers.push({ room })
-
-        socket.join(room)
-
-        socket.emit("loggedin")
-
-        socket.broadcast.emit("newConnection")
-
+  
+    let users = []
+    io.on("connection", (socket) => {
+        socket.on("addUser", userID => {
+          addUser(userID, socket.id)
+          io.emit("getUsers", users)
+          console.log(users)
+        })
     })
+    
 }
 
 export default onConnection
