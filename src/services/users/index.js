@@ -24,7 +24,7 @@ userRouter.get("/", JWTAuth, async (req, res, next) => {
       username: req.query.username,
     });
     res.send(user);
-    console.log(user)
+    
   } catch (error) {
     next(error);
   }

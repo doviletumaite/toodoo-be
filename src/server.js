@@ -53,41 +53,48 @@ app.use((req, res, next) => {
 // io.use(authorizeSocket)
 
 let users = []
-const addUser = (userID, socketId) => {
-  !users.some(user=>user.userID === userID) &&
-  users.push({userID, socketId})
+const addUser = (userId, socketId) => {
+  !users.some(user=>user.userId === userId) &&
+  users.push({userId, socketId})
+  console.log({users})
 }
 const removeUser = (socketId) => {
   users = users.filter((user) => user.socketId !== socketId)
 }
 const getUser = (userId) => {
-   return users.find(user=>user.userID == userId)
+   return users.find(user=>user.userId == userId)
 }
     io.on("connection", (socket) => {
+
+      console.log("socket " ,socket.id ,", is connected")
         socket.on("addUser", userID => {
           addUser(userID, socket.id)
           io.emit("getUsers", users)
-          console.log("useeeeerrrr",users)
         })
 
-        socket.on("sendMessage", async ({sender, receiverId, text, conversationId}) => {
-            const user = getUser(receiverId)
-            // console.log("user",user)
-
-
-            // save to db......
-            try {
-              const newMessage = new messageModel({sender, receiverId, text, conversationId})
-              await newMessage.save()
-              
-            } catch (error) {
-              console.log(error)
-            }
-
-            io.to(user.socketId).emit("incoming-msg", {
-              receiverId, text, conversationId
-            })
-            console.log(text, conversationId)
+        socket.on("sendMessage", async (payload) => {
+          console.log(payload)
+          const {sender, receiverId, text, conversationId} = payload
+            const user =  getUser(receiverId)
+             console.log("user",user)
+             console.log("receiverId",receiverId)
+            console.log({sender})
+             
+          io.to(user.socketId).emit("incoming-msg", 
+            payload
+            )
+            console.log("text, conversationId",text, conversationId)
+            console.log("user receiver",user)
+         
+            // try {
+            //   const newMessage = new messageModel({sender,receiverId,  text, conversationId})
+            //   await newMessage.save()
+            //   console.log("newMessage",newMessage)
+            // } catch (error) {
+            //   console.log(error)
+            // }
+ 
+            
         })
 
         socket.on("disconnect", () => {
