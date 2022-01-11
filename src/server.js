@@ -111,7 +111,7 @@ app.use(badRequestHandler);
 app.use(genericErrorHandler);
 
 passport.use("google", googleStrategy);
-//app.use(passport.initialize());
+app.use(passport.initialize());
 app.use("/user", userRouter)
 app.use("/posts", postRouter)
 app.use("/list", listRouter)
