@@ -24,3 +24,4 @@ const JWTAuth = async (req, res, next) => {
 }
 
 export default JWTAuth
+

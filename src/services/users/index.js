@@ -18,7 +18,16 @@ userRouter.post("/newaccount", async (req, res, next) => {
         next(error)
     }
 })
-
+userRouter.get("/", JWTAuth, async (req, res, next) => {
+  try {
+    const user = await userModel.find({
+      username: req.query.username,
+    }) ;
+    res.send(user);
+  } catch (error) {
+    next(error);
+  }
+});
 userRouter.post("/login",async (req, res, next) => {
     try {
         const { email, password} = req.body
@@ -95,6 +104,7 @@ userRouter.post("/avatar", JWTAuth,
       }
     }
   );
+ 
   userRouter.get("/",JWTAuth, async (req, res, next) => {
     try {
         const users = await userModel.find({})
@@ -171,16 +181,6 @@ userRouter.get("/:id", async (req, res, next) => {
     }
   });
   
-  userRouter.get("/", JWTAuth, async (req, res, next) => {
-    try {
-      const users = await userModel.find({
-        username: req.query.username,
-      });
-  
-      res.send(users);
-    } catch (error) {
-      next(error);
-    }
-  });
+
 
 export default userRouter
