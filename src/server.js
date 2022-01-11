@@ -23,7 +23,7 @@ import messageModel from "./socketio/message/schema.js"
 
 const app = express();
 
-const whiteList = ["http://localhost:3003", "http://localhost:3000", "http://localhost:3003/user/googleLogin" ];
+const whiteList = ["http://localhost:3003", "http://localhost:3000", "http://localhost:3003/user/googleLogin", "https://toodoo-fe.vercel.app" ];
 const corsOptions = {
   origin: (origin, callback) => {
 
