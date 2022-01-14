@@ -6,7 +6,7 @@ import userModel from "../schema.js"
 const googleStrategy = new GoogleStrategy({
     clientID: process.env.GOOGLE_OAUTH_ID,
     clientSecret: process.env.GOOGLE_OAUTH_SECRET,
-    callbackURL: `${process.env.API_URL}/user/googleRedirect`
+    callbackURL: `${process.env.API_DEPLOYED_URL}/user/googleRedirect`
 }, async (accessToken, refreshToken, googleProfile, next) => {
     try {
         const user = await userModel.findOne({googleId: googleProfile.id})
