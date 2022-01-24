@@ -24,6 +24,7 @@ userRouter.get("/", JWTAuth, async (req, res, next) => {
     const user = await userModel.find({
       username: req.query.username,
     }) ;
+    console.log(req.query)
     res.send(user);
   } catch (error) {
     next(error);
