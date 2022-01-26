@@ -51,7 +51,9 @@ userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, r
   console.log("user in redirect request",user)
    const decodedToken = await verifyJWT(user.tokens.accessToken)
    console.log("decodedToken._id",decodedToken._id)
-     res.redirect(frontendUrl +`/showcasepre/${decodedToken._id}/${user.tokens.accessToken}` )
+   res.send(user)
+  //  res.redirect(frontendUrl +`/showcasepre/${decodedToken._id}/${user.tokens.accessToken}` )
+    //  res.redirect(frontendUrl +`/showcasepre/${decodedToken._id}/${user.tokens.accessToken}` )
         console.log(res)
     } catch (error) {
         next(error) 
