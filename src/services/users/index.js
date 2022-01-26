@@ -53,7 +53,7 @@ userRouter.get("/googleRedirect", passport.authenticate("google"), async (req, r
    const decodedToken = await verifyJWT(user.tokens.accessToken)
    console.log("decodedToken._id",decodedToken._id)
    console.log(res)
-   res.redirect(frontendUrl +`/showcasepre` )
+   res.redirect(`https://toodoo-fe.vercel.app/showcasepre` )
     //  res.redirect(frontendUrl +`/showcasepre/${decodedToken._id}/${user.tokens.accessToken}` )
         console.log(res)
     } catch (error) {
