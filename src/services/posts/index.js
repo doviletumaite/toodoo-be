@@ -85,7 +85,7 @@ postRouter.post( "/postwithimage",JWTAuth, parseFile.single('picture'), async (r
       newPost.picture = req.file.path 
       const post = new postModel(newPost)
       const { _id } = await post.save(post) 
-      res.status(201).send() 
+      res.status(201).send(post) 
   } catch (error) {
       next(error)
   }
