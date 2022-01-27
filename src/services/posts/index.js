@@ -80,17 +80,33 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
 postRouter.post( "/postwithimage",JWTAuth, parseFile.single('picture'), async (req, res, next) => {
   try {
       const newPost = JSON.parse(req.body.text)
+      console.log("req.body", req.body) 
       console.log("newPost", newPost) 
       newPost.user = req.user._id
       newPost.picture = req.file.path 
       const post = new postModel(newPost)
       const { _id } = await post.save(post) 
-      res.status(201).send(post) 
+      res.status(201).send(_id ) 
   } catch (error) {
       next(error)
   }
   }
 )
+// postRouter.post( "/:idUser/postwithimage",JWTAuth, parseFile.single('picture'), async (req, res, next) => {
+//   try {
+//       const newPost = JSON.parse(req.body.text)
+//       console.log("newPost", newPost) 
+//       newPost.user = req.params.idUser
+//       newPost.picture = req.file.path 
+//       const post = new postModel(newPost)
+//       const { _id } = await post.save(post) 
+//       console.log(post)
+//       res.status(201).send(_id) 
+//   } catch (error) {
+//       next(error)
+//   }
+//   }
+// )
 
   postRouter.post("/:id/comment", async (req, res, next) => {
     try {
