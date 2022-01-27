@@ -80,6 +80,7 @@ postRouter.put("/:id/picture", parseFile.single("picture"),
 postRouter.post( "/postwithimage",JWTAuth, parseFile.single('picture'), async (req, res, next) => {
   try {
       const newPost = JSON.parse(req.body.text)
+      console.log("req", req) 
       console.log("req.body", req.body) 
       console.log("newPost", newPost) 
       newPost.user = req.user._id
